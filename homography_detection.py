@@ -14,10 +14,12 @@ redundant_point_max_difference = 22
 maximum_allowable_point_to_line_fulcrum_distance = 9
 t_detection_maximum_allowable_point_to_line_distance = 9
 
-def find_valid_homographies(rgb_image, canny_threshold0, queue):
+def find_homographies(image_path, width_rescale, height_rescale, canny_threshold0, valid_homographies):
+    gray_resize = cv2.cvtColor(cv2.resize(cv2.imread(image_path), (width_rescale, height_rescale)), cv2.COLOR_BGR2GRAY)
+
     for canny_threshold1 in range(canny_threshold1_start, canny_threshold1_end):
         court_points = []
-        detected_lines = cv2.HoughLinesP(cv2.dilate(cv2.Canny(cv2.cvtColor(rgb_image, cv2.COLOR_RGB2GRAY), canny_threshold0, canny_threshold1), np.ones((dilation, dilation))), 1, np.pi/180, hough_threshold, None, min_line_distance, max_line_gap)
+        detected_lines = cv2.HoughLinesP(cv2.dilate(cv2.Canny(gray_resize, canny_threshold0, canny_threshold1), np.ones((dilation, dilation))), 1, np.pi/180, hough_threshold, None, min_line_distance, max_line_gap)
         number_of_lines = len(detected_lines)
 
         if number_of_lines > 6 and number_of_lines < max_number_of_lines:
@@ -133,5 +135,4 @@ def find_valid_homographies(rgb_image, canny_threshold0, queue):
                         for i in range(len(predict_known)):
                             homography_error += abs(flattened_detected_points[i] - predict_known[i])
 
-                        detected_and_predicted = np.array(ordered_detected_points + [point[0] for point in cv2.perspectiveTransform(np.array([[point] for point in [[-700, 11887], [0, 11887], [1372, 11887], [5486, 11887], [9601, 11887], [10973, 11887], [11673, 11887], [1372, 18288], [5486, 18288], [9601, 18288], [0, 23774], [1372, 23774], [9601, 23774], [10973, 23774]]], dtype=float), h)], dtype=int)
-                        queue.put({'homography_error': homography_error, 'detected_and_predicted': detected_and_predicted})
+                        valid_homographies.append({'homography_error': homography_error, 'detected_and_predicted': np.array(ordered_detected_points + [point[0] for point in cv2.perspectiveTransform(np.array([[point] for point in [[-700, 11887], [0, 11887], [1372, 11887], [5486, 11887], [9601, 11887], [10973, 11887], [11673, 11887], [1372, 18288], [5486, 18288], [9601, 18288], [0, 23774], [1372, 23774], [9601, 23774], [10973, 23774]]], dtype=float), h)], dtype=int)})
