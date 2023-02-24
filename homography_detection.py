@@ -14,12 +14,10 @@ redundant_point_max_difference = 22
 maximum_allowable_point_to_line_fulcrum_distance = 9
 t_detection_maximum_allowable_point_to_line_distance = 9
 
-def find_homographies(image_path, width_rescale, height_rescale, canny_threshold0, valid_homographies):
-    gray_resize = cv2.cvtColor(cv2.resize(cv2.imread(image_path), (width_rescale, height_rescale)), cv2.COLOR_BGR2GRAY)
-
+def find_homographies(gray, canny_threshold0, valid_homographies):
     for canny_threshold1 in range(canny_threshold1_start, canny_threshold1_end):
         court_points = []
-        detected_lines = cv2.HoughLinesP(cv2.dilate(cv2.Canny(gray_resize, canny_threshold0, canny_threshold1), np.ones((dilation, dilation))), 1, np.pi/180, hough_threshold, None, min_line_distance, max_line_gap)
+        detected_lines = cv2.HoughLinesP(cv2.dilate(cv2.Canny(gray, canny_threshold0, canny_threshold1), np.ones((dilation, dilation))), 1, np.pi/180, hough_threshold, None, min_line_distance, max_line_gap)
         number_of_lines = len(detected_lines)
 
         if number_of_lines > 6 and number_of_lines < max_number_of_lines:
