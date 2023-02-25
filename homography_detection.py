@@ -16,11 +16,12 @@ t_detection_maximum_allowable_point_to_line_distance = 9
 
 def find_homographies(gray, canny_threshold1, valid_homographies):
     for canny_threshold0 in range(canny_threshold0_start, canny_threshold0_end):
-        court_points = []
         detected_lines = cv2.HoughLinesP(cv2.dilate(cv2.Canny(gray, canny_threshold0, canny_threshold1), np.ones((dilation, dilation))), 1, np.pi/180, hough_threshold, None, min_line_distance, max_line_gap)
         number_of_lines = len(detected_lines)
 
         if number_of_lines > 6 and number_of_lines < max_number_of_lines:
+            court_points = []
+            
             for i in range(number_of_lines):
                 for j in range(i+1, number_of_lines):
                     line0 = detected_lines[i][0]
