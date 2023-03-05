@@ -3,6 +3,7 @@ conda activate tennis_court<br/>
 conda install -y jupyter opencv matplotlib<br/>
 jupyter notebook
 
+
 Solution:
 
 Step #1) - Detect Lines Within Image:
