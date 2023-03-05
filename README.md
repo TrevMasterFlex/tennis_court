@@ -1,6 +1,6 @@
-conda create -n tennis_court python=3.8<br/>
+conda create -n tennis_court python=3.10<br/>
 conda activate tennis_court<br/>
-conda install -y jupyter opencv matplotlib<br/>
+conda install -y jupyter matplotlib opencv<br/>
 jupyter notebook<br/><br/>
 
 
