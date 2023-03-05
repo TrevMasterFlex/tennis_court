@@ -1,7 +1,8 @@
 conda create -n tennis_court python=3.8<br/>
 conda activate tennis_court<br/>
 conda install -y jupyter opencv matplotlib<br/>
-jupyter notebook<br/>
+jupyter notebook<br/><br/>
+
 
 Solution:
 
