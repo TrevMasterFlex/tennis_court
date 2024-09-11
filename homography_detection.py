@@ -1,5 +1,5 @@
 import cv2
-import numpy as np
+import numpy
 
 buffer = 1
 dilation = 5
@@ -16,7 +16,7 @@ t_detection_maximum_allowable_point_to_line_distance = 9
 
 def find_homographies(gray, canny_threshold1, valid_homographies):
     for canny_threshold0 in range(canny_threshold0_start, canny_threshold0_end):
-        detected_lines = cv2.HoughLinesP(cv2.dilate(cv2.Canny(gray, canny_threshold0, canny_threshold1), np.ones((dilation, dilation))), 1, np.pi/180, hough_threshold, None, min_line_distance, max_line_gap)
+        detected_lines = cv2.HoughLinesP(cv2.dilate(cv2.Canny(gray, canny_threshold0, canny_threshold1), numpy.ones((dilation, dilation))), 1, numpy.pi/180, hough_threshold, None, min_line_distance, max_line_gap)
         number_of_lines = len(detected_lines)
 
         if number_of_lines > 6 and number_of_lines < max_number_of_lines:
@@ -43,7 +43,7 @@ def find_homographies(gray, canny_threshold1, valid_homographies):
                         multiplied_slopes = m0*m1
 
                         if multiplied_slopes != -1:
-                            angle = np.arctan((m1 - m0)/(1 + multiplied_slopes))
+                            angle = numpy.arctan((m1 - m0)/(1 + multiplied_slopes))
 
                             if abs(angle) > min_angle:
                                 b0 = line0_y0 - line0_x0*m0
@@ -125,13 +125,13 @@ def find_homographies(gray, canny_threshold1, valid_homographies):
                     if four_set_found:
                         ordered_detected_points = [[point['point_x'], point['point_y']] for point in sorted(four_points_on_line, key=lambda point: point['point_x']) + sorted(three_points_on_line, key=lambda point: point['point_x'])]
                         known = [[0, 0], [1372, 0], [9601, 0], [10973, 0], [1372, 5486], [5486, 5486], [9601, 5486]]
-                        npa_ordered_detected_points = np.array(ordered_detected_points)
-                        h, _ = cv2.findHomography(np.array(known), npa_ordered_detected_points)
+                        npa_ordered_detected_points = numpy.array(ordered_detected_points)
+                        h, _ = cv2.findHomography(numpy.array(known), npa_ordered_detected_points)
                         flattened_detected_points = npa_ordered_detected_points.flatten()
-                        predict_known = np.array([point[0] for point in cv2.perspectiveTransform(np.array([[point] for point in known], dtype=float), h)]).flatten()
+                        predict_known = numpy.array([point[0] for point in cv2.perspectiveTransform(numpy.array([[point] for point in known], dtype=float), h)]).flatten()
                         homography_error = 0
 
                         for i in range(len(predict_known)):
                             homography_error += abs(flattened_detected_points[i] - predict_known[i])
 
-                        valid_homographies.append({'homography_error': homography_error, 'detected_and_predicted': np.array(ordered_detected_points + [point[0] for point in cv2.perspectiveTransform(np.array([[point] for point in [[-700, 11887], [0, 11887], [1372, 11887], [5486, 11887], [9601, 11887], [10973, 11887], [11673, 11887], [1372, 18288], [5486, 18288], [9601, 18288], [0, 23774], [1372, 23774], [9601, 23774], [10973, 23774]]], dtype=float), h)], dtype=int)})
+                        valid_homographies.append({'homography_error': homography_error, 'detected_and_predicted': numpy.array(ordered_detected_points + [point[0] for point in cv2.perspectiveTransform(numpy.array([[point] for point in [[-700, 11887], [0, 11887], [1372, 11887], [5486, 11887], [9601, 11887], [10973, 11887], [11673, 11887], [1372, 18288], [5486, 18288], [9601, 18288], [0, 23774], [1372, 23774], [9601, 23774], [10973, 23774]]], dtype=float), h)], dtype=int)})
